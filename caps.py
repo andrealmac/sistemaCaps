@@ -1,3 +1,33 @@
+def salvarUsuario(lista):
+    arquivo = open('prontuario.txt', 'w')
+
+    for usuario in lista:
+        arquivo.write('{},{},{},{},{},{},{},{},{}\n'.format(usuario['nome'],usuario['prontuario'],usuario['telefone'],
+        usuario['data_de_nascimento'],usuario['segunda'],usuario['terca'],usuario['quarta'],
+        usuario['quinta'],usuario['injetavel']))
+    arquivo.close()
+
+def carregarUsuario():
+    lista = []
+    arquivo = open('prontuario.txt', 'r')
+
+    for linha in arquivo.readlines():
+        coluna = linha.split(',')
+        usuario = {
+        'prontuario': coluna[1],
+        'nome': coluna[0],
+        'telefone': coluna[2],
+        'data_de_nascimento': coluna[3],
+        'segunda': coluna[4],
+        'terca': coluna[5],
+        'quarta': coluna[6],
+        'quinta': coluna[7],
+        'injetavel': coluna[8],
+        }
+        lista.append(usuario)#adicinar na lista
+    arquivo.close()
+    return lista
+
 def existe_prontuario(lista, prontuario):
     #percorrer a lista para verificar se existe aque prontuario
     if len(lista) > 0:
@@ -22,6 +52,7 @@ def adicionar(lista):
         'prontuario': prontuario,
         'nome': input('Digite o nome: ').upper(),
         'telefone': input('Digite o telefone: '),
+        'data_de_nascimento': input('Digite a data de nascimento do usuário: '),
         'segunda': input('Digite [s]sim ou [n]nao se o usuário vem na segunda: ').upper(),
         'terca': input('Digite [s]sim ou [n]nao se o usuário vem na terça: ').upper(),
         'quarta': input('Digite [s]sim ou [n]nao se o usuário vem na quarta: ').upper(),
@@ -45,6 +76,7 @@ def listar(lista):
             print('Usuário {}: '.format(i+1))
             print('\tNome: {}'.format(usuario['nome']))
             print('\tTelefone: {}'.format(usuario['telefone']))
+            print('\tdata_de_nascimento: {}'.format(usuario['data_de_nascimento']))
             print('\tSegunda: {}'.format(usuario['segunda']))
             print('\tTerça: {}'.format(usuario['terca']))
             print('\tQuarta: {}'.format(usuario['quarta']))
@@ -58,7 +90,7 @@ def listar(lista):
 
 def principal():
 
-    lista = []#iniciar lista vazia que ira incrementando 
+    lista = carregarUsuario()#iniciar lista de onde parou 
 
     while True:
         print('Agenda Caps')
@@ -72,10 +104,13 @@ def principal():
 
         if opcao == 1:
             adicionar(lista)
+            salvarUsuario(lista)
         elif opcao == 2:
             alterar()
+            salvarUsuario(lista)
         elif opcao == 3:
             excluir()
+            salvarUsuario(lista)
         elif opcao == 4:
             buscar()
         elif opcao == 5:
