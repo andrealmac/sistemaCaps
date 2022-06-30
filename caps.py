@@ -9,23 +9,26 @@ def salvarUsuario(lista):
 
 def carregarUsuario():
     lista = []
-    arquivo = open('prontuario.txt', 'r')
+    try:
+        arquivo = open('prontuario.txt', 'r')
 
-    for linha in arquivo.readlines():
-        coluna = linha.split(',')
-        usuario = {
-        'prontuario': coluna[1],
-        'nome': coluna[0],
-        'telefone': coluna[2],
-        'data_de_nascimento': coluna[3],
-        'segunda': coluna[4],
-        'terca': coluna[5],
-        'quarta': coluna[6],
-        'quinta': coluna[7],
-        'injetavel': coluna[8],
-        }
-        lista.append(usuario)#adicinar na lista
-    arquivo.close()
+        for linha in arquivo.readlines():
+            coluna = linha.strip().split(',')
+            usuario = {
+            'prontuario': coluna[1],
+            'nome': coluna[0],
+            'telefone': coluna[2],
+            'data_de_nascimento': coluna[3],
+            'segunda': coluna[4],
+            'terca': coluna[5],
+            'quarta': coluna[6],
+            'quinta': coluna[7],
+            'injetavel': coluna[8],
+            }
+            lista.append(usuario)#adicinar na lista
+        arquivo.close()
+    except FileNotFoundError:
+        print('Erro em abrir o arquivo')
     return lista
 
 def existe_prontuario(lista, prontuario):
@@ -63,17 +66,93 @@ def adicionar(lista):
 
     print('O usuário {} foi cadastrdo com sucesso!\n'.format(usuario['nome']))
 
-def alterar():
-    pass
-def excluir():
-    pass
-def buscar():
-    pass
+def alterar(lista):
+    print('== Alterar Usuário == ')
+    if len(lista) > 0:
+        prontuario = input("Digite o numero do prontuario a ser alterado: ")
+        if existe_prontuario(lista, prontuario):
+            for usuario in lista:
+                if usuario['prontuario'] == prontuario:
+                    print('Nome: {}'.format(usuario['nome']))
+                    print('Telefone: {}'.format(usuario['telefone']))
+                    print('data_de_nascimento: {}'.format(usuario['data_de_nascimento']))
+                    print('Segunda: {}'.format(usuario['segunda']))
+                    print('Terça: {}'.format(usuario['terca']))
+                    print('Quarta: {}'.format(usuario['quarta']))
+                    print('Quinta: {}'.format(usuario['quinta']))
+                    print('Injetável: {}'.format(usuario['injetavel']))
+                    print('======================================\n')
+
+                    #Alterar o usuario
+                    usuario['nome'] = input('Digite o novo nome: ') 
+                    usuario['telefone'] = input('Digite o novo telefone: ')   
+                    usuario['data_de_nascimento'] = input('Digite a nova data de nascimento: ')   
+                    usuario['segunda'] = input('Digite se [s]sim e [n]não se o dia do usuário é segunda: ')   
+                    usuario['terca'] = input('Digite se [s]sim e [n]não se o dia do usuário é terça: ') 
+                    usuario['quarta'] = input('Digite se [s]sim e [n]não se o dia do usuário é quarta: ') 
+                    usuario['quinta'] = input('Digite se [s]sim e [n]não se o dia do usuário é quinta: ') 
+                    usuario['injetavel'] = input('Digite se [s]sim e [n]não se o usuário toma injetável: ')
+                    print('Os dados do usuário {}, foram alteradas com sucesso!.'.format(usuario['prontuario']))
+                    break 
+        else:
+            print('Nao existe nenhum usuario com este número de prontuario {}\n'.format(prontuario))
+    else:
+        print("Não existe nenhum usuário cadastrado!!.\n")
+
+def excluir(lista):
+    print('== Excluir Usuário == ')
+    if len(lista) > 0:
+        prontuario = input("Digite o numero do prontuario a ser excluído: ")
+        if existe_prontuario(lista, prontuario):
+            for i, usuario in enumerate(lista):
+                if usuario['prontuario'] == prontuario:
+                    print('Nome: {}'.format(usuario['nome']))
+                    print('Telefone: {}'.format(usuario['telefone']))
+                    print('data_de_nascimento: {}'.format(usuario['data_de_nascimento']))
+                    print('Segunda: {}'.format(usuario['segunda']))
+                    print('Terça: {}'.format(usuario['terca']))
+                    print('Quarta: {}'.format(usuario['quarta']))
+                    print('Quinta: {}'.format(usuario['quinta']))
+                    print('Injetável: {}'.format(usuario['injetavel']))
+                    print('======================================\n')
+
+                    # Excluido o contato precisa esta enumerado
+                    del lista[i]
+                    print('O usuário foi apagado com sucesso!!!')
+                    break
+        else:
+            print('Nao existe nenhum usuario com este número de prontuario {}\n'.format(prontuario))
+    else:
+        print("Não existe nenhum usuário cadastrado!!.\n")
+
+def buscar(lista):
+    print('== Buscar Usuário == ')
+    if len(lista) > 0:
+        prontuario = input("Digite o numero do prontuario a ser procurado: ")
+        if existe_prontuario(lista, prontuario):
+            for usuario in lista:
+                if usuario['prontuario'] == prontuario:
+                    print('Nome: {}'.format(usuario['nome']))
+                    print('Telefone: {}'.format(usuario['telefone']))
+                    print('data_de_nascimento: {}'.format(usuario['data_de_nascimento']))
+                    print('Segunda: {}'.format(usuario['segunda']))
+                    print('Terça: {}'.format(usuario['terca']))
+                    print('Quarta: {}'.format(usuario['quarta']))
+                    print('Quinta: {}'.format(usuario['quinta']))
+                    print('Injetável: {}'.format(usuario['injetavel']))
+                    print('======================================\n')
+                    break
+        else:
+            print('Nao existe nenhum usuario com este número de prontuario {}\n'.format(prontuario))
+    else:
+        print("Não existe nenhum usuário cadastrado!!.\n")
+
 def listar(lista):
     print('== Listar Usuários == ')
     if len(lista) > 0:
         for i, usuario in enumerate(lista):
             print('Usuário {}: '.format(i+1))
+            print('\tProntuario: {}'.format(usuario['prontuario']))
             print('\tNome: {}'.format(usuario['nome']))
             print('\tTelefone: {}'.format(usuario['telefone']))
             print('\tdata_de_nascimento: {}'.format(usuario['data_de_nascimento']))
@@ -106,13 +185,13 @@ def principal():
             adicionar(lista)
             salvarUsuario(lista)
         elif opcao == 2:
-            alterar()
+            alterar(lista)
             salvarUsuario(lista)
         elif opcao == 3:
-            excluir()
+            excluir(lista)
             salvarUsuario(lista)
         elif opcao == 4:
-            buscar()
+            buscar(lista)
         elif opcao == 5:
             listar(lista)
         elif opcao == 6:
